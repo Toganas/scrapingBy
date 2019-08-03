@@ -30,7 +30,9 @@ app.set("view engine", "handlebars");
 
 // connect to mongodb
 
-mongoose.connect("mongodb://localhost/scrapingby", { useNewUrlParser: true });
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://loclhost/mongoHeadlines";
+
+mongoose.connect(MONGODB_URI);
 
 // creating scraping routes
 
