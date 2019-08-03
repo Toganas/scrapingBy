@@ -35,7 +35,13 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlin
 mongoose.connect(MONGODB_URI);
 // mongoose.connect("mongodb://loclhost/mongoHeadlines", { useNewUrlParser: true })
 
-// creating scraping routes
+// creating  routes
+
+app.get("/", (req,res)=>{
+    db.Article.find({}, (err,data)=>{
+        res.render("index")
+    })
+})
 
 // GET route for scraping
 app.get("/scrape", (req, res) => {
