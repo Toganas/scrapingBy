@@ -30,9 +30,10 @@ app.set("view engine", "handlebars");
 
 // connect to mongodb
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://loclhost/mongoHeadlines";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 mongoose.connect(MONGODB_URI);
+// mongoose.connect("mongodb://loclhost/mongoHeadlines", { useNewUrlParser: true })
 
 // creating scraping routes
 
@@ -55,9 +56,26 @@ app.get("/scrape", (req, res) => {
             db.Article.create(result).then((dbArticle) => {
                 console.log(dbArticle);
             })
-        })
+            .catch((err) => {
+                console.log(err);
+            });
+        });
+        res.send("Scrape Complete")
     })
-})
+});
+
+// Show all articles
+app.get("/articles", (req,res)=>{
+    db.Article.find({})
+    .then((dbArticle)=>{
+        res.json(dbArticle);
+    })
+    .catch((err)=>{
+        res.json(err);
+    });
+});
+
+
 app.listen(PORT, () => {
     console.log("running at: http://localhost:" + PORT);
 });
