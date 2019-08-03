@@ -85,6 +85,16 @@ app.get("/articles/:id",(req,res)=>{
     });
 });
 
+app.post("/articles/:id",(req,res)=>{
+    db.Note.create(req.body).then((dbNote)=>{
+        return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+    }).then((dbArticle)=>{
+        res.json(dbArticle);
+    }).catch((err)=>{
+        res.json(err);
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log("running at: http://localhost:" + PORT);
