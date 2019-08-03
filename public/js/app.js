@@ -13,7 +13,6 @@ $(document).on("click", "p", function(){
         method: "GET",
         url: "/articles/" + thisId
     }).then ((data)=>{
-        console.log(data);
 
         $("#notes").append(`<h2>${data.title}</h2>`);
         $("#notes").append(`<input id="titleinput name="title">`);
@@ -26,3 +25,25 @@ $(document).on("click", "p", function(){
         };
     });
 });
+
+
+$(document).on("click", "#savenote", function(){
+    const thisId = $(this).attr("data-id");
+
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + thisId,
+        data:{
+            title: $("#titleinput").val(),
+            body: $("#bodyinput").val()
+        }
+    }).then((data)=>{
+        console.log(data);
+
+        $("#notes").empty();
+    });
+    $("#titleinput").val("");
+    $("#bodyinput").val("");
+});
+
+// $.get("/scrape")
