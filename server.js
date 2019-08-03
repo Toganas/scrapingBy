@@ -75,6 +75,16 @@ app.get("/articles", (req,res)=>{
     });
 });
 
+// route to grab a specific article by id
+
+app.get("/articles/:id",(req,res)=>{
+    db.Article.findOne({ _id: req.params.id }).populate("note").then((dbArticle)=>{
+        res.json(dbArticle);
+    }).catch((err)=>{
+        res.json(err);
+    });
+});
+
 
 app.listen(PORT, () => {
     console.log("running at: http://localhost:" + PORT);
