@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 // create new Article Schema
 
-const ArticleSchema = newSchema ({
+const ArticleSchema = new Schema ({
     title:{
         type: String,
         required: true
