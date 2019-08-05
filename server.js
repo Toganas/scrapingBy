@@ -33,8 +33,6 @@ app.set("view engine", "handlebars");
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 mongoose.connect(MONGODB_URI);
-// mongoose.connect("mongodb://loclhost/mongoHeadlines", { useNewUrlParser: true })
-
 // creating  routes
 
 app.get("/", (req,res)=>{
@@ -102,6 +100,13 @@ app.post("/articles/:id",(req,res)=>{
         res.json(err);
     });
 });
+
+app.post("/favorite/:id", (req, res) =>{
+    
+    db.Article.findByIdAndUpdate(req.params.id, { favorite: true },(err,data) => {
+    
+    })
+})
 
 
 app.listen(PORT, () => {
