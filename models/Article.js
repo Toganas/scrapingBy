@@ -18,6 +18,10 @@ const ArticleSchema = new Schema ({
     summary:{
         type: String,
     },
+    favorite:{
+        type: Boolean,
+        default: false
+    },
     note: {
         type: Schema.Types.ObjectId,
         ref: "Note"
