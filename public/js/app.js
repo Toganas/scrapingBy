@@ -1,7 +1,7 @@
 // grab json articles
 $.getJSON("/articles", (data) => {
     for (var i = 0; i < data.length; i++) {
-        $("#articles").append(`<p data-id="${data[i]._id}">${data[i].title}<br />${data[i].link}</p>`);
+        $("#articles").append(`<p data-id="${data[i]._id}">${data[i].title}<br />${data[i].link}<br />${data[i].summary}</p>`);
     }
 });
 
@@ -25,4 +25,21 @@ $(document).on("click", "p", function(){
             $("#bodyinput").val(data.note.body);
         };
     });
+});
+
+$(document).on("click", "#savenote", function() {
+    const thisId = $(this).attr("data-id");
+
+    $.ajax({
+        method: "POST",
+        url: "/articles/" +thisId,
+        data: {
+            title: $("#titleinput").val(),
+            body: $("#bodyinput").val()
+        }
+    }).then((data)=>{
+        $("#notes").empty();
+    });
+    $("#titleinput").val("");
+    $("#bodyinput").val("");
 });
