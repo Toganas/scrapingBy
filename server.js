@@ -13,7 +13,7 @@ const exphbs = require("express-handlebars");
 
 // intialize express
 const app = express();
-
+var routes = require("./routes")
 // require all models
 const db = require("./models")
 
@@ -23,7 +23,7 @@ app.use(express.static("public"));
 // Parse request as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(routes)
 // setting handlebars
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -33,6 +33,7 @@ app.set("view engine", "handlebars");
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 mongoose.connect(MONGODB_URI);
+
 // creating  routes
 
 app.get("/", (req,res)=>{
@@ -100,6 +101,7 @@ app.post("/articles/:id",(req,res)=>{
         res.json(err);
     });
 });
+
 
 app.post("/favorite/:id", (req, res) =>{
     

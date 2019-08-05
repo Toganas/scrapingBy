@@ -26,8 +26,10 @@ $(document).on("click", "h5", function () {
     $.ajax({
         method: "GET",
         url: "/articles/" + thisId
+
     }).then((data) => {
         console.log(data);
+
 
         $("#notes").append(`<h2>${data.title}</h2>`);
         $("#notes").append(`<input id="titleinput name="title">`);
@@ -41,22 +43,27 @@ $(document).on("click", "h5", function () {
     });
 });
 
+
 $(document).on("click", "#savenote", function () {
+
     const thisId = $(this).attr("data-id");
 
     $.ajax({
         method: "POST",
         url: "/articles/" + thisId,
+
         data: {
             title: $("#titleinput").val(),
             body: $("#bodyinput").val()
         }
     }).then((data) => {
+
         $("#notes").empty();
     });
     $("#titleinput").val("");
     $("#bodyinput").val("");
 });
+
 
 $(document).on("click", ".save", function () {
     const thisId = $(this).attr("data-id")
@@ -71,3 +78,4 @@ $(document).on("click", ".save", function () {
         location.reload();
     })
 })
+
