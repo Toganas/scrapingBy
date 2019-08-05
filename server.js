@@ -54,7 +54,8 @@ app.get("/scrape", (req, res) => {
             const result = {};
 
             result.title = $(this).children("a").children("h3").text();
-            result.link = $(this).children("a.articleTitle").attr("href")
+            result.link = $(this).children("a.articleTitle").attr("href");
+            result.summary = $(this).children("p.articleDescription").text();
             console.log(result);
 
             // create new Article
