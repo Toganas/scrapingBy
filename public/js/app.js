@@ -1,5 +1,3 @@
-import { notStrictEqual } from "assert";
-
 // grab json articles
 $.getJSON("/articles", (data) => {
     // $.ajax({
@@ -35,7 +33,7 @@ $.getJSON("/articles", (data) => {
             <div class="card-header" >
                 <h2><a href="${data[i].link}">${data[i].title}</a></h2>
                 <a class = "btn btn-primary note" data-id="${data[i]._id}">Make a Note</a>
-                <a class = "btn btn-primary remove" data-id="${data[i]._id}">Remove from favorites</a>
+                <a class = "btn btn-primary remove" href="/favorites" data-id="${data[i]._id}">Remove from favorites</a>
             </div>
             <div class="card-body">
                 <h5 class="card-title">${data[i].summary}<h5>
@@ -55,18 +53,21 @@ $(document).on("click", ".note", function () {
         url: "/articles/" + thisId
 
     }).then((data) => {
-        console.log(data);
-
-
+        console.log(data.note);
+        // data.note.forEach((note)=>{
+        //     $("#notes").append(`${note}`)
+        // })
+        
+        
         $("#notes").append(`<h2>${data.title}</h2>`);
-        $("#notes").append(`<input id="titleinput name="title">`);
+        if (data.note) {
+            $("#notes").append(data.note.body + "<br>");
+        };
+
         $("#notes").append(`<textarea id="bodyinput" name="body"></textarea>`);
         $("#notes").append(`<button data-id="${data._id}" id="savenote">Save Note</button>`);
 
-        if (data.note) {
-            $("#titleinput").val(data.note.title);
-            $("#bodyinput").val(data.note.body);
-        };
+        
     });
 });
 
