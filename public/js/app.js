@@ -1,6 +1,13 @@
+import { notStrictEqual } from "assert";
+
 // grab json articles
 $.getJSON("/articles", (data) => {
-
+    // $.ajax({
+    //     method: "GET",
+    //     url: "/scrape"
+    // }).then((data)=>{
+    //     console.log(data);
+    // })
     for (var i = 0; i < data.length; i++) {
         if (data[i].favorite === false) {
             // $("#articles").append(`<p data-id="${data[i]._id}">${data[i].title}<br />${data[i].link}<br />${data[i].summary}</p>`);
@@ -19,7 +26,27 @@ $.getJSON("/articles", (data) => {
     };
 });
 
-$(document).on("click", "h5", function () {
+$.getJSON("/articles", (data) => {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].favorite === true) {
+
+            $("#favorites").append(`
+        <div class="card mb-3">
+            <div class="card-header" >
+                <h2><a href="${data[i].link}">${data[i].title}</a></h2>
+                <a class = "btn btn-primary note" data-id="${data[i]._id}">Make a Note</a>
+                <a class = "btn btn-primary remove" data-id="${data[i]._id}">Remove from favorites</a>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${data[i].summary}<h5>
+            </div>
+        </div>
+                `);
+        };
+    };
+});
+
+$(document).on("click", ".note", function () {
     $("#notes").empty();
     const thisId = $(this).attr("data-id");
 
@@ -74,8 +101,21 @@ $(document).on("click", ".save", function () {
         data: {
             favorite: true
         }
-    }).then((data) => {
+    }).then(() => {
         location.reload();
     })
 })
 
+$(document).on("click", ".remove", function () {
+    const thisId = $(this).attr("data-id")
+    console.log(thisId)
+    $.ajax({
+        method: "POST",
+        url: "/remove/" + thisId,
+        data: {
+            favorite: false
+        }
+    }).then(() => {
+        location.reload();
+    })
+})
