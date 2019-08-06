@@ -13,7 +13,7 @@ $.getJSON("/articles", (data) => {
         <div class="card mb-3">
             <div class="card-header" >
                 <h2><a href="${data[i].link}">${data[i].title}</a></h2>
-                <a class = "btn btn-primary save" data-id="${data[i]._id}">Save Article</a>
+                <a class = "btn btn-primary save" href="/" data-id="${data[i]._id}">Save Article</a>
             </div>
             <div class="card-body">
                 <h5 class="card-title">${data[i].summary}<h5>
@@ -25,7 +25,7 @@ $.getJSON("/articles", (data) => {
 });
 
 $.getJSON("/articles", (data) => {
-      for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
         if (data[i].favorite === true) {
 
             $("#favorites").append(`
@@ -53,21 +53,22 @@ $(document).on("click", ".note", function () {
         url: "/articles/" + thisId
 
     }).then((data) => {
-        console.log(data.note);
-        // data.note.forEach((note)=>{
-        //     $("#notes").append(`${note}`)
-        // })
+        // data.note.body.forEach(data)
+        // console.log(data.note.body);
         
-        
+
+
+
         $("#notes").append(`<h2>${data.title}</h2>`);
-        if (data.note) {
-            $("#notes").append(data.note.body + "<br>");
-        };
+        // for (var i = 0; i < data.length; i++) {
+            // if (data.note) {
+            $("#notes").append(`<li>${data.note[0].body} <button class="delete" data-id="${data._id}">Delete note</button></li>`);
+            // };
+        // }
+        $("#notes").append(`<textarea id="bodyinput" rows="4" cols="50" name="body"></textarea><br>
+        <button data-id="${data._id}" id="savenote">Save Note</button>`);
 
-        $("#notes").append(`<textarea id="bodyinput" name="body"></textarea>`);
-        $("#notes").append(`<button data-id="${data._id}" id="savenote">Save Note</button>`);
 
-        
     });
 });
 
@@ -84,7 +85,7 @@ $(document).on("click", "#savenote", function () {
             title: $("#titleinput").val(),
             body: $("#bodyinput").val()
         }
-    }).then((data) => {
+    }).then(() => {
 
         $("#notes").empty();
     });
