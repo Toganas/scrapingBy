@@ -13,7 +13,7 @@ const exphbs = require("express-handlebars");
 
 // intialize express
 const app = express();
-var routes = require("./routes")
+// const routes = require("./routes")
 // require all models
 const db = require("./models")
 
@@ -23,7 +23,7 @@ app.use(express.static("public"));
 // Parse request as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(routes)
+// app.use(routes)
 // setting handlebars
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -66,7 +66,7 @@ app.get("/scrape", (req, res) => {
                 console.log(err);
             });
         });
-        res.send("Scrape Complete")
+        res.redirect("/")
     })
 });
 
@@ -110,6 +110,18 @@ app.post("/favorite/:id", (req, res) =>{
     })
 })
 
+app.post("/remove/:id", (req,res) =>{
+
+    db.Article.findByIdAndUpdate(req.params.id, { favorite: false }, (err, data) => {
+
+    })
+})
+
+app.get("/favorites", (req,res) =>{
+    db.Article.find({}, (err,data)=>{
+        res.render("favorites")
+    })
+})
 
 app.listen(PORT, () => {
     console.log("running at: http://localhost:" + PORT);
