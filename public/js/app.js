@@ -1,11 +1,5 @@
-// grab json articles
+// grab json articles, show all articles that aren't favorited
 $.getJSON("/articles", (data) => {
-    // $.ajax({
-    //     method: "GET",
-    //     url: "/scrape"
-    // }).then((data)=>{
-    //     console.log(data);
-    // })
     for (var i = 0; i < data.length; i++) {
         if (data[i].favorite === false) {
             // $("#articles").append(`<p data-id="${data[i]._id}">${data[i].title}<br />${data[i].link}<br />${data[i].summary}</p>`);
@@ -23,7 +17,7 @@ $.getJSON("/articles", (data) => {
         };
     };
 });
-
+// show all articles that are favorited
 $.getJSON("/articles", (data) => {
     for (var i = 0; i < data.length; i++) {
         if (data[i].favorite === true) {
@@ -46,40 +40,34 @@ $.getJSON("/articles", (data) => {
 
 $(document).on("click", ".note", function () {
     $("#notes").empty();
+    $("#prevNotes").empty();
     const thisId = $(this).attr("data-id");
 
     $.ajax({
         method: "GET",
         url: "/articles/" + thisId
 
-    }).then((data) => {
+    }).then(data => {
         // data.note.body.forEach(data)
-        // console.log(data.note.body);
-        
-
-
-
+        console.log(data);
         $("#notes").append(`<h2>${data.title}</h2>`);
-        // for (var i = 0; i < data.length; i++) {
-            // if (data.note) {
-            $("#notes").append(`<li>${data.note[0].body} <button class="delete" data-id="${data._id}">Delete note</button></li>`);
-            // };
-        // }
-        $("#notes").append(`<textarea id="bodyinput" rows="4" cols="50" name="body"></textarea><br>
+        $("#notes").append("<input id='titleinput' placeholder='Title for Note' name='title' >")
+        $("#notes").append(`<textarea id="bodyinput" placeholder="New Note" rows="4" cols="50" name="body"></textarea><br>
         <button data-id="${data._id}" id="savenote">Save Note</button>`);
-
-
+        if (data.note) {
+            console.log(data.note);
+            $("#prevNotes").append(`<li>${data.note[0].title} : ${data.note[0].body} <button class="delete" data-id="${data.note[0]._id}">Delete note</button></li>`);
+        };
     });
 });
 
 
+// updating note
 $(document).on("click", "#savenote", function () {
-
-    const thisId = $(this).attr("data-id");
-
+    // const thisId = $(this).attr("data-id");
     $.ajax({
         method: "POST",
-        url: "/articles/" + thisId,
+        url: "/articles/",
 
         data: {
             title: $("#titleinput").val(),
@@ -88,11 +76,13 @@ $(document).on("click", "#savenote", function () {
     }).then(() => {
 
         $("#notes").empty();
+        $("#prevNotes").empty();
     });
     $("#titleinput").val("");
     $("#bodyinput").val("");
 });
 
+// put in favorites
 
 $(document).on("click", ".save", function () {
     const thisId = $(this).attr("data-id")
@@ -108,6 +98,7 @@ $(document).on("click", ".save", function () {
     })
 })
 
+// remove from favorites
 $(document).on("click", ".remove", function () {
     const thisId = $(this).attr("data-id")
     console.log(thisId)
@@ -119,5 +110,16 @@ $(document).on("click", ".remove", function () {
         }
     }).then(() => {
         location.reload();
+    })
+})
+
+$(document).on("click", ".delete", function (){
+    const thisId = $(this).attr("data-id")
+    console.log(thisId);
+    $.ajax({
+        method: "DELETE",
+        url: "/notes/" + thisId
+    }).then(()=>{
+        location.reload
     })
 })
