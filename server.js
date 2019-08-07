@@ -89,7 +89,9 @@ app.get("/articles", (req, res) => {
 // route to grab a specific article by id
 
 app.get("/articles/:id", (req, res) => {
-    db.Article.findOne({ _id: req.params.id }).populate("note").then((dbArticle) => {
+    db.Article.findOne({ _id: req.params.id })
+    .populate("note")
+    .then((dbArticle) => {
         res.json(dbArticle);
     }).catch((err) => {
         res.json(err);
@@ -97,9 +99,10 @@ app.get("/articles/:id", (req, res) => {
 });
 
 // Update article's notes by id
-app.post("/articles/:id", (req, res) => {
+app.post("/articles/", (req, res) => {
+    // creates a note.
     db.Note.create(req.body).then((dbNote) => {
-        return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+        return db.Article.findOneAndUpdate({}, { note: dbNote._id }, { new: true });
     }).then((dbArticle) => {
         res.json(dbArticle);
     }).catch((err) => {
@@ -107,7 +110,7 @@ app.post("/articles/:id", (req, res) => {
     });
 });
 
-
+// post the favorite as true
 app.post("/favorite/:id", (req, res) => {
 
     db.Article.findByIdAndUpdate(req.params.id, { favorite: true }, (err, data) => {
@@ -115,18 +118,39 @@ app.post("/favorite/:id", (req, res) => {
     })
 })
 
+// post the favorite as false
 app.post("/remove/:id", (req, res) => {
 
     db.Article.findByIdAndUpdate(req.params.id, { favorite: false }, (err, data) => {
 
     })
 })
-
+// render favorites
 app.get("/favorites", (req, res) => {
     db.Article.find({}, (err, data) => {
         res.render("favorites")
     })
 })
+
+// retrieve all Notes
+
+app.get("/notes", (req,res)=>{
+    db.Note.find({})
+    .then(dbNote=>{
+        res.json(dbNote);
+    })
+    .catch(err=>{
+        res.json
+    })
+})
+
+app.delete("/notes/:id", (req,res)=>{
+    db.Note.deleteOne({ _id: req.params.id}, (err)=>{
+        if (err) return handleError(err)
+    })
+})
+
+
 
 app.listen(PORT, () => {
     console.log("running at: http://localhost:" + PORT);
